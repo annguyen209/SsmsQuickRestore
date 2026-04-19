@@ -5,9 +5,9 @@ database restore from ~8 clicks to one.
 
 ## Demo
 
-<video src="https://github.com/annguyen209/SsmsQuickRestore/raw/main/docs/SSMS_Quick_Restore.mp4" controls muted width="720"></video>
+![SSMS Quick Restore demo](docs/SSMS_Quick_Restore.gif)
 
-<sub>If the video does not play inline, [download it here](docs/SSMS_Quick_Restore.mp4).</sub>
+<sub>Prefer the full-resolution video? [Download the MP4](docs/SSMS_Quick_Restore.mp4).</sub>
 
 ## Features
 
