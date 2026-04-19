@@ -190,5 +190,13 @@ namespace SsmsRestoreDrop.UI
 
         private void ClearOutput_Click(object sender, RoutedEventArgs e)
             => _vm.OutputText = string.Empty;
+
+        private void AuthorLink_Click(object sender,
+                                      System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            try { System.Diagnostics.Process.Start(e.Uri.ToString()); }
+            catch (Exception ex) { Logger.Warn($"Failed to open link: {ex.Message}"); }
+            e.Handled = true;
+        }
     }
 }

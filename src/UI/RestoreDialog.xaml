@@ -208,15 +208,32 @@
             </TextBox>
         </Grid>
 
-        <!-- ── Action buttons ─────────────────────────────────────────── -->
-        <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right"
-                    Margin="0,6,0,0">
-            <Button Content="Refresh"  Click="Refresh_Click"  Margin="0,0,6,0"/>
-            <Button Content="Script"   Click="Script_Click"   Margin="0,0,6,0"/>
-            <Button Content="Restore"  Click="Restore_Click"  Margin="0,0,6,0"
-                    IsDefault="True" FontWeight="SemiBold"/>
-            <Button Content="Cancel"   Click="Cancel_Click"   IsCancel="True"/>
-        </StackPanel>
+        <!-- ── Action buttons + author/version footer ────────────────── -->
+        <Grid Grid.Row="7" Margin="0,6,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" VerticalAlignment="Center"
+                       FontSize="11" Foreground="#666666">
+                <Run Text="SSMS Quick Restore"/>
+                <Run Text="  v"/><Run Text="{Binding Version, Mode=OneWay}"/>
+                <Run Text="  by "/>
+                <Hyperlink NavigateUri="https://github.com/annguyen209"
+                           RequestNavigate="AuthorLink_Click">
+                    anzdev4life
+                </Hyperlink>
+            </TextBlock>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Content="Refresh"  Click="Refresh_Click"  Margin="0,0,6,0"/>
+                <Button Content="Script"   Click="Script_Click"   Margin="0,0,6,0"/>
+                <Button Content="Restore"  Click="Restore_Click"  Margin="0,0,6,0"
+                        IsDefault="True" FontWeight="SemiBold"/>
+                <Button Content="Cancel"   Click="Cancel_Click"   IsCancel="True"/>
+            </StackPanel>
+        </Grid>
 
     </Grid>
 </Window>

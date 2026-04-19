@@ -3,6 +3,12 @@
 A Visual Studio extension (VSIX) for **SQL Server Management Studio 21 and 22** that reduces a
 database restore from ~8 clicks to one.
 
+## Demo
+
+https://github.com/annguyen209/SsmsQuickRestore/raw/main/docs/SSMS_Quick_Restore.mp4
+
+<sub>If the video does not play inline, [download it here](docs/SSMS_Quick_Restore.mp4).</sub>
+
 ## Features
 
 - **Toolbar button + Tools menu item**: "Restore from backup file..."

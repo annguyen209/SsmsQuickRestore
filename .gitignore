@@ -39,6 +39,10 @@ desktop.ini
 # ── Stray files ──────────────────────────────────────────────────────
 null
 
+# ── Inno Setup output ────────────────────────────────────────────────
+installer/Output/
+*.exe
+
 # ── User-specific build properties ───────────────────────────────────
 *.user.props
 **/local.settings.json
