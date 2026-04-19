@@ -36,25 +36,46 @@ database restore from ~8 clicks to one.
 
 ## Installation
 
-> **Important:** SSMS does not load extensions from the per-user VS extension hive that
-> the standard VSIX Installer uses. The extension must be deployed directly into the SSMS
-> install directory's `Extensions\` folder. Use the steps below.
+### Recommended: use the installer
 
-### Manual install (recommended)
-
-1. Download `SsmsRestoreDrop.vsix` from the [Releases](../../releases) page (or build from source).
+1. Download `SsmsQuickRestore-Setup-1.0.0.exe` from the [Releases](../../releases/latest) page.
 2. Close SSMS if it is running.
-3. Open **PowerShell as Administrator** and run:
+3. Right-click the .exe and choose **Run as administrator** (writing to `Program Files`
+   requires elevation).
+4. Click through Welcome -> License -> Install. The installer:
+   - Auto-detects SSMS 22 / 21 install paths (default location + registry fallback)
+   - Refuses to continue if SSMS isn't found and offers a download link
+   - Copies the extension to `<SSMS>\Common7\IDE\Extensions\SsmsQuickRestore\`
+   - Runs `Ssms.exe /updateconfiguration` so SSMS rebuilds its pkgdef cache
+5. Launch SSMS. The toolbar button and **Tools -> Restore from backup file...** menu item appear.
+
+### Uninstall
+
+Settings -> Apps -> "SSMS Quick Restore" -> Uninstall, or run `unins000.exe` from the install
+folder. The uninstaller removes the files and refreshes the SSMS configuration automatically.
+
+### Manual install (advanced)
+
+If you prefer not to run the installer, download `SsmsRestoreDrop.vsix` from the
+[Releases](../../releases/latest) page and deploy it manually:
+
+1. Close SSMS if it is running.
+2. Open **PowerShell as Administrator** and run:
 
    ```powershell
    $vsix    = 'C:\path\to\SsmsRestoreDrop.vsix'
    $extDir  = 'C:\Program Files\Microsoft SQL Server Management Studio 22\Release\Common7\IDE\Extensions\SsmsQuickRestore'
    $ssmsExe = 'C:\Program Files\Microsoft SQL Server Management Studio 22\Release\Common7\IDE\Ssms.exe'
 
-   # Extract VSIX (it is a ZIP)
-   Expand-Archive $vsix -DestinationPath $env:TEMP\SsmsQuickRestore_Extract -Force
+   # Extract the VSIX (it is a ZIP archive)
+   Add-Type -AssemblyName System.IO.Compression.FileSystem
+   $tmp = Join-Path $env:TEMP 'SsmsQuickRestore_Extract'
+   if (Test-Path $tmp) { Remove-Item $tmp -Recurse -Force }
+   [System.IO.Compression.ZipFile]::ExtractToDirectory($vsix, $tmp)
+
+   # Copy into the SSMS Extensions folder
    New-Item -ItemType Directory -Force -Path $extDir | Out-Null
-   Copy-Item "$env:TEMP\SsmsQuickRestore_Extract\*" $extDir -Recurse -Force
+   Copy-Item "$tmp\*" $extDir -Recurse -Force
 
    # Patch the pkgdef so SSMS can locate the DLL via $PackageFolder$
    $pkgdef = Join-Path $extDir 'SsmsRestoreDrop.pkgdef'
@@ -62,18 +83,12 @@ database restore from ~8 clicks to one.
    $c = $c -replace '"Assembly"="[^"]+"', '"CodeBase"="$PackageFolder$\SsmsRestoreDrop.dll"'
    [System.IO.File]::WriteAllText($pkgdef, $c, [System.Text.Encoding]::Unicode)
 
-   # Tell SSMS to rebuild its pkgdef cache
+   # Refresh SSMS pkgdef cache
    & $ssmsExe /updateconfiguration | Out-Null
    ```
 
-4. Launch SSMS. The toolbar button and **Tools -> Restore from backup file...** menu item appear.
-
-For SSMS 21, replace the path prefix accordingly.
-
-### Uninstall
-
-Close SSMS, delete the `Extensions\SsmsQuickRestore` folder under the SSMS install dir, then run
-`Ssms.exe /updateconfiguration` once.
+For SSMS 21, replace the path prefix accordingly. To uninstall manually, close SSMS, delete the
+`Extensions\SsmsQuickRestore` folder, and run `Ssms.exe /updateconfiguration` once.
 
 ## Usage
 
@@ -136,6 +151,19 @@ If SSMS is installed somewhere other than the default path, set `SsmsInstallDir`
 dotnet build src\SsmsRestoreDrop.csproj -c Release `
     -p:SsmsInstallDir="D:\SSMS22\Common7\IDE\"
 ```
+
+### Build the installer
+
+The installer script lives in `installer/SsmsQuickRestore.iss`. Build with the bundled
+PowerShell wrapper (requires Inno Setup 6 in `C:\Program Files (x86)\Inno Setup 6\`):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File installer\build-installer.ps1
+```
+
+The script builds the project in Release, patches the generated pkgdef
+(`Assembly` -> `CodeBase`), and produces
+`installer\Output\SsmsQuickRestore-Setup-<version>.exe`.
 
 ### Run tests
 
