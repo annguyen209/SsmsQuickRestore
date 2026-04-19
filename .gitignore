@@ -1,0 +1,44 @@
+# ── Build outputs ────────────────────────────────────────────────────
+[Bb]in/
+[Oo]bj/
+[Pp]ackages/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.lock.json
+project.lock.json
+
+# ── VS / VSSDK ───────────────────────────────────────────────────────
+.vs/
+.vscode/
+*.vsix
+*.pdb
+*.dll
+**/*_wpftmp.csproj
+
+# ── PublishOutput / temp dirs ────────────────────────────────────────
+[Pp]ublish/
+[Tt]ools/
+TestResults/
+*.trx
+
+# ── Test artifacts ───────────────────────────────────────────────────
+tests/test-assets/*.bak
+tests/test-assets/*.trn
+
+# ── OS / editor cruft ────────────────────────────────────────────────
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+*.bak
+*.tmp
+*.log
+
+# ── Stray files ──────────────────────────────────────────────────────
+null
+
+# ── User-specific build properties ───────────────────────────────────
+*.user.props
+**/local.settings.json

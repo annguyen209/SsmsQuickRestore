@@ -1,0 +1,26 @@
+<Project>
+  <!--
+    Import the VSSDK packaging targets from the NuGet package.
+    This is needed when the "Visual Studio extension development" workload is NOT installed
+    (CI machines, clean dev boxes). The targets live in the VSSDK.BuildTools package.
+  -->
+  <PropertyGroup>
+    <!-- Locate the microsoft.vssdk.buildtools package directory via the PKG property NuGet sets -->
+    <_VsSDKTargets Condition="'$(PKGMicrosoft_VSSDK_BuildTools)' != ''">$(PKGMicrosoft_VSSDK_BuildTools)\tools\vssdk\Microsoft.VsSDK.targets</_VsSDKTargets>
+    <!-- Fallback: walk the NuGet package root directly -->
+    <_VsSDKTargets Condition="'$(_VsSDKTargets)' == '' and '$(NuGetPackageRoot)' != ''">$(NuGetPackageRoot)microsoft.vssdk.buildtools\17.12.2069\tools\vssdk\Microsoft.VsSDK.targets</_VsSDKTargets>
+  </PropertyGroup>
+
+  <!-- Only import VSSDK targets for the actual VSIX project (which sets GeneratePkgDefFile=true).
+       The test project must not run pkgdef/vsix steps. -->
+  <Import Project="$(_VsSDKTargets)"
+          Condition="'$(_VsSDKTargets)' != '' and Exists('$(_VsSDKTargets)') and '$(GeneratePkgDefFile)' == 'true'" />
+
+  <!-- Ensure CreateVsixContainer runs as part of the standard Build target -->
+  <Target Name="ForceVsixAfterBuild" AfterTargets="Build"
+          Condition="'$(_VsSDKTargets)' != '' and Exists('$(_VsSDKTargets)') and '$(GeneratePkgDefFile)' == 'true'">
+    <MSBuild Projects="$(MSBuildProjectFullPath)"
+             Targets="CreateVsixContainer"
+             Properties="Configuration=$(Configuration);Platform=$(Platform);DeployExtension=false" />
+  </Target>
+</Project>

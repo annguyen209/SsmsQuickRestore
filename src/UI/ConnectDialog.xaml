@@ -1,0 +1,49 @@
+<Window x:Class="SsmsRestoreDrop.UI.ConnectDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Connect to Server"
+        Width="420" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="110"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label   Grid.Row="0" Grid.Column="0" Content="Server name:"/>
+        <TextBox Grid.Row="0" Grid.Column="1" x:Name="ServerBox"
+                 Text="" Margin="0,2"/>
+
+        <Label   Grid.Row="1" Grid.Column="0" Content="Authentication:"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="AuthBox"
+                  Margin="0,2" SelectionChanged="Auth_Changed">
+            <ComboBoxItem Content="Windows Authentication" IsSelected="True"/>
+            <ComboBoxItem Content="SQL Server Authentication"/>
+        </ComboBox>
+
+        <Label   Grid.Row="2" Grid.Column="0" Content="Login:" x:Name="LoginLabel"/>
+        <TextBox Grid.Row="2" Grid.Column="1" x:Name="LoginBox" Margin="0,2"/>
+
+        <Label   Grid.Row="3" Grid.Column="0" Content="Password:" x:Name="PwdLabel"/>
+        <PasswordBox Grid.Row="3" Grid.Column="1" x:Name="PwdBox" Margin="0,2"/>
+
+        <TextBlock Grid.Row="4" Grid.ColumnSpan="2"
+                   Text="{Binding ErrorMessage}" Foreground="Red"
+                   TextWrapping="Wrap" Margin="0,4"/>
+
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal"
+                    HorizontalAlignment="Right" Margin="0,8,0,0">
+            <Button Content="Connect" Click="Connect_Click" IsDefault="True" Margin="0,0,6,0"/>
+            <Button Content="Cancel"  Click="Cancel_Click"  IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

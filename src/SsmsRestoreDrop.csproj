@@ -1,0 +1,102 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <OutputType>Library</OutputType>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <!-- VSIX packaging -->
+    <GeneratePkgDefFile>true</GeneratePkgDefFile>
+    <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
+    <!-- Launch SSMS in experimental hive when debugging -->
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Program Files\Microsoft SQL Server Management Studio 22\Release\Common7\IDE\Ssms.exe</StartProgram>
+    <StartArguments>/rootsuffix Exp</StartArguments>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- VS 2022 SDK meta-package — ExcludeAssets=runtime keeps VS DLLs out of the VSIX -->
+    <PackageReference Include="Microsoft.VisualStudio.Sdk"        Version="17.11.36"   ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools"        Version="17.11.2109" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- System.Design is needed for OleMenuCommandService.AddCommand(MenuCommand) -->
+  <ItemGroup>
+    <Reference Include="System.Design" />
+  </ItemGroup>
+
+  <!-- Reference SMO + SqlWorkbench.Interfaces directly from the SSMS install dir.
+       This guarantees the assembly version we compile against matches what SSMS loads
+       at runtime (NuGet SMO packages lag the SSMS-internal SMO version). -->
+  <ItemGroup Condition="Exists('$(SsmsInstallDir)Microsoft.SqlServer.Smo.dll')">
+    <Reference Include="Microsoft.SqlServer.Smo">
+      <HintPath>$(SsmsInstallDir)Microsoft.SqlServer.Smo.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.SmoExtended">
+      <HintPath>$(SsmsInstallDir)Microsoft.SqlServer.SmoExtended.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.ConnectionInfo">
+      <HintPath>$(SsmsInstallDir)Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc">
+      <HintPath>$(SsmsInstallDir)Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.SqlClient">
+      <HintPath>$(SsmsInstallDir)Microsoft.Data.SqlClient.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SqlWorkbench.Interfaces">
+      <HintPath>$(SsmsInstallDir)SqlWorkbench.Interfaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- VSCT command table -->
+  <ItemGroup>
+    <VSCTCompile Include="SsmsRestoreDrop.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
+    </VSCTCompile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="source.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Explicit declaration needed for VSIX pkgdef generation; disable SDK auto-include to avoid duplicate -->
+    <EmbeddedResource Include="VSPackage.resx" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+  </PropertyGroup>
+
+  <!-- Icons — included in the VSIX and available to the VSCT bitmap loader -->
+  <ItemGroup>
+    <Content Include="Resources\SsmsRestoreDrop_16.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SsmsRestoreDrop_32.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\SsmsRestoreDrop_64.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+
+</Project>

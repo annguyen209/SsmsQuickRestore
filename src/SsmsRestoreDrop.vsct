@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+
+  <Commands package="guidSsmsRestoreDropPackage">
+
+    <Menus>
+      <!-- Custom toolbar that docks alongside standard VS toolbars -->
+      <Menu guid="guidSsmsRestoreDropCmdSet" id="RestoreToolbar"
+            priority="0x0000" type="Toolbar">
+        <Strings>
+          <ButtonText>Restore Backup</ButtonText>
+          <CommandName>Restore Backup</CommandName>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Groups>
+      <!-- Group in the Tools menu -->
+      <Group guid="guidSsmsRestoreDropCmdSet" id="RestoreMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+      </Group>
+
+      <!-- Group on our custom toolbar -->
+      <Group guid="guidSsmsRestoreDropCmdSet" id="RestoreToolbarGroup" priority="0x0000">
+        <Parent guid="guidSsmsRestoreDropCmdSet" id="RestoreToolbar"/>
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidSsmsRestoreDropCmdSet" id="RestoreFromFileCommandId"
+              priority="0x0100" type="Button">
+        <Parent guid="guidSsmsRestoreDropCmdSet" id="RestoreMenuGroup"/>
+        <Icon guid="guidImages" id="bmpPic1"/>
+        <CommandFlag>IconAndText</CommandFlag>
+        <Strings>
+          <ButtonText>Restore from backup file...</ButtonText>
+          <ToolTipText>Open the Quick Restore dialog to restore a .bak or .trn file</ToolTipText>
+        </Strings>
+      </Button>
+    </Buttons>
+
+    <Bitmaps>
+      <!-- 32×32 PNG — VS scales automatically for high-DPI -->
+      <Bitmap guid="guidImages"
+              href="Resources\SsmsRestoreDrop_32.png"
+              usedList="bmpPic1"/>
+    </Bitmaps>
+
+  </Commands>
+
+  <!-- Place the same command on the toolbar as well -->
+  <CommandPlacements>
+    <CommandPlacement guid="guidSsmsRestoreDropCmdSet" id="RestoreFromFileCommandId" priority="0x0100">
+      <Parent guid="guidSsmsRestoreDropCmdSet" id="RestoreToolbarGroup"/>
+    </CommandPlacement>
+  </CommandPlacements>
+
+  <Symbols>
+    <GuidSymbol name="guidSsmsRestoreDropPackage"
+                value="{A4B5C6D7-E8F9-4A1B-8C3D-4E5F6A7B8C9D}" />
+
+    <GuidSymbol name="guidSsmsRestoreDropCmdSet"
+                value="{B5C6D7E8-F9A0-4B2C-9D4E-5F6A7B8C9D0E}">
+      <IDSymbol name="RestoreMenuGroup"         value="0x1020" />
+      <IDSymbol name="RestoreToolbarGroup"      value="0x1021" />
+      <IDSymbol name="RestoreToolbar"           value="0x1030" />
+      <IDSymbol name="RestoreFromFileCommandId" value="0x0100" />
+      <IDSymbol name="ProgressToolWindowCmd"    value="0x0101" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidImages"
+                value="{C6D7E8F9-A0B1-4C2D-AE4F-6A7B8C9D0E1F}">
+      <IDSymbol name="bmpPic1" value="1"/>
+    </GuidSymbol>
+  </Symbols>
+
+</CommandTable>

@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <RootNamespace>SsmsRestoreDrop</RootNamespace>
+    <AssemblyName>SsmsRestoreDrop</AssemblyName>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!-- Allow CI builds without SSMS installed by supplying a stub assembly path -->
+    <SsmsInstallDir Condition="'$(SsmsInstallDir)'==''">C:\Program Files\Microsoft SQL Server Management Studio 22\Release\Common7\IDE\</SsmsInstallDir>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Nullable>enable</Nullable>
+    <LangVersion>9.0</LangVersion>
+    <!-- Override the assembly name set in Directory.Build.props to avoid clash with the main project -->
+    <AssemblyName>SsmsRestoreDrop.Tests</AssemblyName>
+    <RootNamespace>SsmsRestoreDrop.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk"   Version="17.10.0" />
+    <PackageReference Include="MSTest.TestAdapter"       Version="3.4.3"   />
+    <PackageReference Include="MSTest.TestFramework"     Version="3.4.3"   />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\SsmsRestoreDrop.csproj" />
+  </ItemGroup>
+
+  <!-- Reference SMO + SqlClient from the SSMS install dir, same as the main project,
+       so the test runner can resolve SMO types when calling into BackupInspector. -->
+  <ItemGroup Condition="Exists('$(SsmsInstallDir)Microsoft.SqlServer.Smo.dll')">
+    <Reference Include="Microsoft.SqlServer.Smo">
+      <HintPath>$(SsmsInstallDir)Microsoft.SqlServer.Smo.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.SmoExtended">
+      <HintPath>$(SsmsInstallDir)Microsoft.SqlServer.SmoExtended.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.ConnectionInfo">
+      <HintPath>$(SsmsInstallDir)Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc">
+      <HintPath>$(SsmsInstallDir)Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.SqlClient">
+      <HintPath>$(SsmsInstallDir)Microsoft.Data.SqlClient.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Test asset: drop a sample .bak into test-assets/ for integration tests -->
+  <ItemGroup>
+    <None Update="test-assets\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
