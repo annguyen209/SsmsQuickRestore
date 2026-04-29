@@ -38,7 +38,7 @@ database restore from ~8 clicks to one.
 
 ### Recommended: use the installer
 
-1. Download `SsmsQuickRestore-Setup-1.0.0.exe` from the [Releases](../../releases/latest) page.
+1. Download `SsmsQuickRestore-Setup-1.1.0.exe` from the [Releases](../../releases/latest) page.
 2. Close SSMS if it is running.
 3. Right-click the .exe and choose **Run as administrator** (writing to `Program Files`
    requires elevation).

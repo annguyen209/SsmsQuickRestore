@@ -44,7 +44,7 @@ namespace SsmsRestoreDrop.UI
 
         // ── Author / version (shown in dialog footer) ─────────────────────────
         public string Version { get; } =
-            typeof(RestoreDialogViewModel).Assembly.GetName().Version?.ToString(3) ?? "1.0.0";
+            typeof(RestoreDialogViewModel).Assembly.GetName().Version?.ToString(3) ?? "1.1.0";
 
         // ── Source files ──────────────────────────────────────────────────────
         public ObservableCollection<string> BackupFiles { get; } = new ObservableCollection<string>();
